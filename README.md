@@ -15,15 +15,21 @@ philosophers cannot know the state of other philosophers.__
 Global variables are forbidden.__
 Each philosopher should be a thread.__
 When a fork is picked up by one philosopher, it can't be picked up by the adjacent philosopher__
-Any state change of a thread must be formatted as__
-◦ timestamp_in_ms X has taken a fork__
-◦ timestamp_in_ms X is eating__
-◦ timestamp_in_ms X is sleeping__
-◦ timestamp_in_ms X is thinking__
-◦ timestamp_in_ms X died__
-The displayed message must not be mixed up with another message.__
-Announcement of death should not be more than 10ms later than the time of death.__
-Race conditions must be avoided.__
+Any state change of a thread must be formatted as
+
+◦ timestamp_in_ms X has taken a fork
+
+◦ timestamp_in_ms X is eating
+
+◦ timestamp_in_ms X is sleeping
+
+◦ timestamp_in_ms X is thinking
+
+◦ timestamp_in_ms X died
+
+The displayed message must not be mixed up with another message.
+Announcement of death should not be more than 10ms later than the time of death.
+Race conditions must be avoided.
 
 ### Bonus Requirements
 

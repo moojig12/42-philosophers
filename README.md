@@ -26,6 +26,8 @@ The displayed message must not be mixed up with another message.
 Announcement of death should not be more than 10ms later than the time of death.  
 Race conditions must be avoided.
 
+More than 200 philosophers may not be tested in Evaluation.
+
 ### Bonus Requirements
 
 Every philosopher must be a process. but the main process should not be a philosopher.  

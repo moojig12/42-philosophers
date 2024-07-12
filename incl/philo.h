@@ -27,6 +27,7 @@ typedef struct s_philo {
 
 typedef struct s_program {
 	pthread_t	*philo;
+	pthread_t	*observer;
 	int	philo_count;
 	int	time_to_die;
 	int	time_to_eat;
@@ -37,6 +38,9 @@ typedef struct s_program {
 	pthread_mutex_t	*meal_lock;
 	pthread_mutex_t	*write_lock;
 }	t_program;
+
+// A function to monitor for observer
+void	*monitor(void *pointer);
 
 // check
 int	check_num(char *argv);

@@ -19,5 +19,5 @@ int	main(int argc, char **argv)
 	initiate_forks(forks, program.philo_count);
 	initiate_philosophers(philo, &program, forks, argv);
 	// call routine
-	start_routine(&program, forks);
+	create_threads(&program, forks);
 }

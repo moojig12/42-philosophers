@@ -1,19 +1,14 @@
 #include "philo.h"
 
-int	ph_print(char *message, int fd)
+void	ph_print_philo(char *message, t_philo *philo)
 {
-	int	len;
+	size_t	time;
 
-	len = 0;
-	while (message[len])
-	{
-		len++;
-	}
-	write(fd, message, len);
-	if (fd == 2)
-		return (1);
-	else
-		return (0);
+	pthread_mutex_lock(philo->write_lock);
+	time = get_current_time() - philo->start_time;
+	if (!dead_loop(philo))
+		printf("%zu %d %s\n", time, philo->id, message);
+	pthread_mutex_unlock(philo->write_lock);
 }
 
 int	ph_atoi(char *input)
@@ -39,4 +34,13 @@ int	ph_atoi(char *input)
 		count++;
 	}
 	return (sign * number);
+}
+
+size_t	get_current_time(void)
+{
+	struct timeval	time;
+
+	if (gettimeofday(&time, NULL) == -1)
+		write(2, "gettimeofday() error\n", 22);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }

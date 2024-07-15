@@ -15,9 +15,9 @@ int	main(int argc, char **argv)
 	if (preliminary_check(argc, argv))
 		return (1);
 	// initiation
-	initiate_program(&program, philo, argv);
-	initiate_forks(forks, program.philo_count);
-	initiate_philosophers(philo, &program, forks, argv);
+	initiate_program(&program, philo);
+	initiate_forks(forks, ph_atoi(argv[1]));
+	initiate_philosophers(philo, forks, &program, argv);
 	// call routine
 	create_threads(&program, forks);
 }

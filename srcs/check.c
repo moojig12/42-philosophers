@@ -19,7 +19,7 @@ int	preliminary_check(int argc, char **argv)
 	/* if (!check_numerical_value(argv, argc))
 		return (ph_print("non-numeric value detected!\n", 2)); */
 	if (argc != 5 && argc != 6)
-		return (ph_print("Wrong number of Arguments!\n", 2));
+		return (ph_print("Invalid arguments!\n", 2));
 	if (ph_atoi(argv[1]) < 1 || ph_atoi(argv[1]) > MAX || \
 	!check_num(argv[1]))
 		return (ph_print("Invalid number of Philosophers!\n", 2));

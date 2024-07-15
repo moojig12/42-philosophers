@@ -7,7 +7,7 @@ HEADER = incl
 SRCDIR = srcs
 OBJDIR = objs
 
-SRCS = $(SRCDIR)/main.c $(SRCDIR)/philo_utils.c $(SRCDIR)/check.c
+SRCS = $(wildcard $(SRCDIR)/*.c)
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
 FLAG = -Wall -Werror -Wextra -pthread -I$(HEADER)

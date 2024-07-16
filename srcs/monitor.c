@@ -6,7 +6,7 @@
 /*   By: root <root@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/07/12 20:56:49 by root              #+#    #+#             */
-/*   Updated: 2024/07/14 19:13:16 by root             ###   ########.fr       */
+/*   Updated: 2024/07/16 19:47:33 by root             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,10 +17,7 @@ int	philosopher_dead(t_philo *philo, size_t time_to_die)
 	pthread_mutex_lock(philo->meal_lock);
 	if (get_current_time() - philo->last_meal >= time_to_die
 		&& philo->eating == 0)
-	{
-		pthread_mutex_unlock(philo->meal_lock);
-		return (1);
-	}
+		return (pthread_mutex_unlock(philo->meal_lock), 1);
 	pthread_mutex_unlock(philo->meal_lock);
 	return (0);
 }
@@ -32,14 +29,17 @@ int	check_dead(t_philo *philo)
 	i = 0;
 	while (i < philo[0].philo_count)
 	{
-		if (philosopher_dead(&philo[0], philo[i].time_to_die))
+		if (philosopher_dead(&philo[i], philo[i].time_to_die))
 		{
 			ph_print_philo("died", &philo[i]);
 			pthread_mutex_lock(philo[0].dead_lock);
 			*philo->dead = 1;
-			pthread_mutex_unlock(philo->dead_lock);
+			pthread_mutex_unlock(philo[0].dead_lock);
+			return (1);
 		}
+		i++;
 	}
+	return (0);
 }
 
 int	check_all_ate(t_philo *philo)
@@ -59,9 +59,9 @@ int	check_all_ate(t_philo *philo)
 		pthread_mutex_unlock(philo[i].meal_lock);
 		i++;
 	}
-	if (done_eating ==- philo[0].philo_count)
+	if (done_eating == philo[0].philo_count)
 	{
-		pthread_mutex_lock(philo[0].dead_lock)
+		pthread_mutex_lock(philo[0].dead_lock);
 		*philo->dead = 1;
 		pthread_mutex_unlock(philo[0].dead_lock);
 		return (1);

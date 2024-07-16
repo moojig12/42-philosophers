@@ -10,7 +10,7 @@ OBJDIR = objs
 SRCS = $(wildcard $(SRCDIR)/*.c)
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-FLAG = -Wall -Werror -Wextra -pthread -I$(HEADER)
+FLAG = -Wall -Werror -Wextra -pthread -I$(HEADER) -g 
 
 all: $(NAME)
 
@@ -30,3 +30,6 @@ fclean: clean
 	rm -f $(NAME)
 
 re: fclean all
+
+memcheck: all
+	valgrind --leak-check=full ./philo 5 800 200 200

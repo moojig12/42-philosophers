@@ -20,4 +20,5 @@ int	main(int argc, char **argv)
 	initiate_philosophers(philo, forks, &program, argv);
 	// call routine
 	create_threads(&program, forks);
+	destroy_all(NULL, &program, forks);
 }

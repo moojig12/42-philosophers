@@ -1,6 +1,6 @@
 #include "philo.h"
 
-void	philo_routine(void *pointer)
+void	*philo_routine(void *pointer)
 {
 	t_philo	*philo;
 
@@ -22,8 +22,9 @@ void	eat(t_philo *philo)
 	ph_print_philo("has taken a fork", philo);
 	if (philo->philo_count == 1)
 	{
-		usleep(philo->time_to_die);
+		ft_usleep(philo->time_to_die);
 		pthread_mutex_unlock(philo->right_fork);
+		return ;
 	}
 	pthread_mutex_lock(philo->left_fork);
 	ph_print_philo("has taken a fork", philo);
@@ -33,7 +34,7 @@ void	eat(t_philo *philo)
 	philo->last_meal = get_current_time();
 	philo->meals_eaten++;
 	pthread_mutex_unlock(philo->meal_lock);
-	usleep(philo->time_to_eat);
+	ft_usleep(philo->time_to_eat);
 	philo->eating = 0;
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
@@ -42,7 +43,7 @@ void	eat(t_philo *philo)
 void	sleepy(t_philo *philo)
 {
 	ph_print_philo("is sleeping", philo);
-	usleep(philo->time_to_sleep);
+	ft_usleep(philo->time_to_sleep);
 }
 
 void	think(t_philo *philo)

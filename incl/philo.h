@@ -1,7 +1,7 @@
 #ifndef PHILO_H
 # define PHILO_H
 
-# define MAX 200
+# define MAX 300
 # define TRUE 1
 # define FALSE 0
 
@@ -44,8 +44,11 @@ typedef struct s_program {
 void	*monitor(void *pointer);
 
 // routine actions
-void	philo_routine(void *pointer);
+void	*philo_routine(void *pointer);
 int		dead_loop(t_philo *philo);
+void	eat(t_philo *philo);
+void	sleepy(t_philo *philo);
+void	think(t_philo *philo);
 
 
 // Main thread creation
@@ -60,11 +63,15 @@ void	initiate_philosophers(t_philo *philo, pthread_mutex_t *forks, \
 
 // check
 int	check_num(char *argv);
+int	check_dead(t_philo *philo);
+int	check_all_ate(t_philo *philo);
 int	preliminary_check(int argc, char **argv);
 
 // misc
 int		ph_atoi(char *input);
 void	ph_print_philo(char *message, t_philo *philo);
 size_t	get_current_time(void);
+void	destroy_all(char *str, t_program *program, pthread_mutex_t *forks);
+int		ft_usleep(size_t milliseconds);
 
 #endif

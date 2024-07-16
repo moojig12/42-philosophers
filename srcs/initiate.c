@@ -43,15 +43,16 @@ void	initiate_philosophers(t_philo *philo, pthread_mutex_t *forks, \
 	while (i < ph_atoi(argv[1]))
 	{
 		philo[i].id = i + 1;
-		save_input(&philo[i], argv);
 		philo[i].eating = 0;
 		philo[i].meals_eaten = 0;
+		save_input(&philo[i], argv);
 		philo[i].start_time = get_current_time();
 		philo[i].last_meal = get_current_time();
 		philo[i].dead = &program->found_dead;
 		philo[i].dead_lock = &program->dead_lock;
 		philo[i].meal_lock = &program->meal_lock;
 		philo[i].write_lock = &program->write_lock;
+		philo[i].left_fork = &forks[i];
 		if (i == 0)
 			philo[i].right_fork = &forks[philo[i].philo_count - 1];
 		else

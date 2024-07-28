@@ -1,37 +1,26 @@
 #include "philo.h"
 
-int	dead_loop(t_philo *philo)
-{
-	pthread_mutex_lock(philo->dead_lock);
-	if  (*philo->dead == 1)
-		return (pthread_mutex_unlock(philo->dead_lock), 1);
-	pthread_mutex_unlock(philo->dead_lock);
-	return (0);
-	
-}
-
-void	create_threads(t_program *program, pthread_mutex_t *forks)
+void	create_threads(t_program *program, t_philo *philo, t_input *input)
 {
 	pthread_t	observer;
-	int	i;
+	int			i;
 
-	if (pthread_create(&observer, NULL, &monitor, program->philo))
-		destroy_all("Thread create error", program, forks);
+	if (pthread_create(&observer, NULL, monitor, program->philo))
+		destroy_all(program);
 	i = 0;
-	while (i < program->philo[0].philo_count)
+	while (i < input->philo_count)
 	{
-		if (pthread_create(&program->philo[i].thread, NULL, \
-			&philo_routine, &program->philo[i]))
-			destroy_all("Thread create error", program, forks);
+		if (pthread_create(&program->philo[i].thread, NULL, routine, &philo[i]))
+			destroy_all(program);
 		i++;
 	}
 	if (pthread_join(observer, NULL))
-			destroy_all("Thread join error for observer", program, forks);
+		destroy_all(program);
 	i = 0;
-	while (i < program->philo[0].philo_count)
+	while (i < input->philo_count)
 	{
-		if (pthread_join(program->philo[i].thread, NULL)  != 0)
-			destroy_all("Thread join error for philo", program, forks);
+		if (pthread_join(philo[i].thread, NULL))
+			destroy_all(program);
 		i++;
 	}
 }

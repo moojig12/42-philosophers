@@ -1,52 +1,57 @@
 #include "philo.h"
 
-void	*philo_routine(void *pointer)
+void	philo_message(char *message, t_philo *philo)
 {
-	t_philo	*philo;
-
-	philo = (t_philo *)pointer;
-	if (philo->id % 2 == 0)
-		ft_usleep(1);
-	while (!dead_loop(philo))
-	{
-		eat(philo);
-		sleepy(philo);
-		think(philo);
-	}
-	return (pointer);
+	printf("%ld %i %s\n", get_current_time(philo), philo->id, message);
 }
 
 void	eat(t_philo *philo)
 {
-	pthread_mutex_lock(philo->right_fork);
-	ph_print_philo("has taken a fork", philo);
-	if (philo->philo_count == 1)
+	pthread_mutex_lock(philo->left_fork);
+	philo_message("has taken a fork", philo);
+	if (philo->input->philo_count == 1)
 	{
-		ft_usleep(philo->time_to_die);
-		pthread_mutex_unlock(philo->right_fork);
+		usleep(philo->input->time_to_die);
+		pthread_mutex_unlock(philo->left_fork);
 		return ;
 	}
-	pthread_mutex_lock(philo->left_fork);
-	ph_print_philo("has taken a fork", philo);
+	pthread_mutex_lock(philo->right_fork);
+	philo_message("has taken a fork", philo);
+
 	philo->eating = 1;
-	ph_print_philo("is eating", philo);
-	pthread_mutex_lock(philo->meal_lock);
-	philo->last_meal = get_current_time();
-	philo->meals_eaten++;
-	pthread_mutex_unlock(philo->meal_lock);
-	ft_usleep(philo->time_to_eat);
+	philo_message("is eating", philo);
+	// pthread_mutex_lock(philo->meal_lock);
+	philo->times_eaten++;
+	philo->last_eaten = get_time();
+	// pthread_mutex_unlock(philo->meal_lock);
+	usleep(philo->input->time_to_eat);
 	philo->eating = 0;
+
 	pthread_mutex_unlock(philo->left_fork);
 	pthread_mutex_unlock(philo->right_fork);
 }
 
 void	sleepy(t_philo *philo)
 {
-	ph_print_philo("is sleeping", philo);
-	ft_usleep(philo->time_to_sleep);
+	philo_message("is sleeping", philo);
+	usleep(philo->input->time_to_sleep);
 }
 
 void	think(t_philo *philo)
 {
-	ph_print_philo("is thinking", philo);
+	philo_message("is thinking", philo);
+}
+
+void	*routine(void *ptr)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *)ptr;
+	while (philo->dead == 0)
+	{
+		eat(philo);
+		sleepy(philo);
+		think(philo);
+	}
+	return (NULL);
 }

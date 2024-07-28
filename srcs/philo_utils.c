@@ -1,16 +1,5 @@
 #include "philo.h"
 
-void	ph_print_philo(char *message, t_philo *philo)
-{
-	size_t	time;
-
-	pthread_mutex_lock(philo->write_lock);
-	time = get_current_time() - philo->start_time;
-	if (!dead_loop(philo))
-		printf("%zu %d %s\n", time, philo->id, message);
-	pthread_mutex_unlock(philo->write_lock);
-}
-
 int	ph_atoi(char *input)
 {
 	int	count;
@@ -36,38 +25,26 @@ int	ph_atoi(char *input)
 	return (sign * number);
 }
 
-int	ft_usleep(size_t milliseconds)
-{
-	size_t	start;
-
-	start = get_current_time();
-	while ((get_current_time() - start) < milliseconds)
-		usleep(milliseconds);
-	return (0);
-}
-
-size_t	get_current_time(void)
+size_t	get_time()
 {
 	struct timeval	time;
 
-	if (gettimeofday(&time, NULL) == -1)
-		write(2, "gettimeofday error\n", 20);
-	return (time.tv_sec * 1000 + time.tv_usec / 100);
+	gettimeofday(&time, NULL);
+	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-void	destroy_all(char *str, t_program *program, pthread_mutex_t *forks)
+size_t	get_current_time(t_philo *philo)
 {
-	int	i;
+	struct timeval	time;
+	size_t			current;
 
-	i = 0;
-	if (str)
-		printf("%s\n", str);
-	pthread_mutex_destroy(&program->write_lock);
-	pthread_mutex_destroy(&program->meal_lock);
-	pthread_mutex_destroy(&program->dead_lock);
-	while (i < program->philo[0].philo_count)
-	{
-		pthread_mutex_destroy(&forks[i]);
-		i++;
-	}
+	gettimeofday(&time, NULL);
+	current = (time.tv_sec * 1000 + time.tv_usec / 1000);
+	return (current - philo->start_time);
+}
+
+void	destroy_all(t_program *program)
+{
+	if (program)
+		return ;
 }

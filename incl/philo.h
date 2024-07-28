@@ -1,77 +1,59 @@
 #ifndef PHILO_H
 # define PHILO_H
 
-# define MAX 300
-# define TRUE 1
-# define FALSE 0
-
-# include <stdio.h>
-# include <stdlib.h>
 # include <unistd.h>
-# include <pthread.h>
-# include <sys/time.h>
+# include <stdio.h>
 # include <limits.h>
+# include <sys/time.h>
+# include <pthread.h>
+# include <stdlib.h>
 
-typedef struct s_philo {
-	pthread_t	thread;
-	int	id;
-	int	eating;
-	int	time_to_die;
+typedef struct s_input {
+	int	philo_count;
+	int time_to_die;
 	int	time_to_eat;
 	int	time_to_sleep;
-	int	times_to_eat_count;
-	int	start_time;
-	int	last_meal;
-	int	meals_eaten;
-	int	philo_count;
-	int	*dead;
-	pthread_mutex_t	*right_fork;
+	int	must_eat;
+}	t_input;
+
+typedef struct s_philo {
+	pthread_t		thread;
+	int				id;
+	int				start_time;
+	int				last_eaten;
+	int				times_eaten;
+	int				eating;
+	int				*dead;
 	pthread_mutex_t	*left_fork;
-	pthread_mutex_t	*meal_lock;
-	pthread_mutex_t	*dead_lock;
-	pthread_mutex_t	*write_lock;
+	pthread_mutex_t	*right_fork;
+	t_input			*input;
 }	t_philo;
 
 typedef struct s_program {
-	t_philo	*philo;
-	int	found_dead;
-	pthread_mutex_t	meal_lock;
-	pthread_mutex_t	dead_lock;
-	pthread_mutex_t	write_lock;
+	int				dead;
+	t_philo			*philo;
+	pthread_mutex_t	*forks;
+	// t_input			*input;
 }	t_program;
 
-// A function to monitor for observer
-void	*monitor(void *pointer);
+// threads
+void	create_threads(t_program *program, t_philo *philo, t_input *input);
 
-// routine actions
-void	*philo_routine(void *pointer);
-int		dead_loop(t_philo *philo);
-void	eat(t_philo *philo);
-void	sleepy(t_philo *philo);
-void	think(t_philo *philo);
+// routine
+void	*routine(void *ptr);
+void	*monitor(void *ptr);
 
-
-// Main thread creation
-void	create_threads(t_program *program, pthread_mutex_t *forks);
-
-
-// initiation
-void	initiate_forks(pthread_mutex_t *forks, int philo_count);
-void	initiate_program(t_program *program, t_philo *philo);
-void	initiate_philosophers(t_philo *philo, pthread_mutex_t *forks, \
-	t_program *program, char **argv);
+// initiate
+void	initiate_program(t_program *program, t_philo *philo, t_input *input);
+t_input	*save_input(char **argv);
 
 // check
-int	check_num(char *argv);
-int	check_dead(t_philo *philo);
-int	check_all_ate(t_philo *philo);
-int	preliminary_check(int argc, char **argv);
+int		pre_check(int argc, char **argv);
 
-// misc
+// utils
 int		ph_atoi(char *input);
-void	ph_print_philo(char *message, t_philo *philo);
-size_t	get_current_time(void);
-void	destroy_all(char *str, t_program *program, pthread_mutex_t *forks);
-int		ft_usleep(size_t milliseconds);
+void	destroy_all(t_program *program);
+size_t	get_time();
+size_t	get_current_time(t_philo *philo);
 
 #endif

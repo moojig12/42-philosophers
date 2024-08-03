@@ -10,7 +10,7 @@ OBJDIR = objs
 SRCS = $(wildcard $(SRCDIR)/*.c)
 OBJS = $(SRCS:$(SRCDIR)/%.c=$(OBJDIR)/%.o)
 
-FLAG = -Wall -Werror -Wextra -pthread -I$(HEADER) -g 
+FLAG = -Wall -Werror -Wextra -pthread -I$(HEADER) -g
 
 all: $(NAME)
 

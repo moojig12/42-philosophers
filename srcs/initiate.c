@@ -21,7 +21,7 @@ void	allocate_forks(pthread_mutex_t *forks, t_program *program, t_input input)
 	int	i;
 
 	i = 0;
-	forks = (pthread_mutex_t *)malloc(input.philo_count * sizeof(pthread_mutex_t));
+	// forks = (pthread_mutex_t *)malloc(input.philo_count * sizeof(pthread_mutex_t));
 	if (!forks)
 		perror("Failed to malloc forks");
 	while (i < input.philo_count)
@@ -33,24 +33,24 @@ void	allocate_forks(pthread_mutex_t *forks, t_program *program, t_input input)
 	program->forks = forks;
 }
 
-t_philo	*allocate_philo(t_philo *philo, t_program *program, t_input *input)
+void	allocate_philo(t_philo *philo, t_program *program, t_input *input)
 {
 	int	i;
 
 	i = 0;
-	philo = (t_philo *)malloc(input->philo_count * sizeof(t_philo));
-	if (!philo)
-		exit (1);
 	while (i < input->philo_count)
 	{
 		philo[i].id = i + 1;
-		philo[i].start_time = get_time();
-		philo[i].last_eaten = get_time();
+		philo[i].philo_count = input->philo_count;
+		philo[i].start_time = philo[i].last_eaten = get_time();
 		philo[i].times_eaten = 0;
 		philo[i].input = input;
 		philo[i].eating = 0;
-		philo[i].dead = &program->dead;
+		philo[i].dead = &program->dead_flag;
 		philo[i].left_fork = &program->forks[i];
+		philo[i].dead_lock = &program->dead_lock;
+		philo[i].write_lock = &program->write_lock;
+		philo[i].meal_lock = &program->meal_lock;
 		if (i == 0)
 			philo[i].right_fork = &program->forks[input->philo_count - 1];
 		else
@@ -58,15 +58,18 @@ t_philo	*allocate_philo(t_philo *philo, t_program *program, t_input *input)
 		i++;
 	}
 	program->philo = philo;
-	return (philo);
 }
 
 void	initiate_program(t_program *program, t_philo *philo, t_input *input)
 {
-	pthread_mutex_t	*forks;
+	// pthread_mutex_t	*forks;
+	pthread_mutex_t	forks[300];
 
-	forks = NULL;
-	program->dead = 0;
+	// forks = NULL;
+	program->dead_flag = 0;
+	pthread_mutex_init(&program->write_lock, NULL);
+	pthread_mutex_init(&program->dead_lock, NULL);
+	pthread_mutex_init(&program->meal_lock, NULL);
 	allocate_forks(forks, program, *input);
-	philo = allocate_philo(philo, program, input);
+	allocate_philo(philo, program, input);
 }

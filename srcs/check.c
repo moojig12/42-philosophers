@@ -36,7 +36,7 @@ int	pre_check(int argc, char **argv)
 	if (ph_atoi(argv[4]) < 1)
 		return (printf("Invalid time to sleep\n"), 1);
 	if (argv[5])
-		if (ph_atoi(argv[5]) < 5)
+		if (ph_atoi(argv[5]) < 1)
 			return (printf("Invalid times to eat\n"), 1);
 	return (0);
 }

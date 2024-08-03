@@ -25,7 +25,7 @@ int	ph_atoi(char *input)
 	return (sign * number);
 }
 
-size_t	get_time()
+long	get_time()
 {
 	struct timeval	time;
 
@@ -33,18 +33,24 @@ size_t	get_time()
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
-size_t	get_current_time(t_philo *philo)
+long	get_current_time(t_philo *philo)
 {
 	struct timeval	time;
-	size_t			current;
+	long			current;
+	long			result;
 
 	gettimeofday(&time, NULL);
-	current = (time.tv_sec * 1000 + time.tv_usec / 1000);
-	return (current - philo->start_time);
+	current = (time.tv_sec * 1000) + (time.tv_usec / 1000);
+	result = current - philo->start_time;
+	return (result);
 }
 
-void	destroy_all(t_program *program)
+int	ft_usleep(long milliseconds)
 {
-	if (program)
-		return ;
+	long	start;
+
+	start = get_time();
+	while ((get_time() - start) < milliseconds)
+		usleep(milliseconds);
+	return (0);
 }

@@ -20,7 +20,6 @@ void	eat(t_philo *philo)
 	}
 	pthread_mutex_lock(philo->left_fork);
 	philo_message("has taken a fork", philo);
-
 	philo->eating = 1;
 	philo_message("is eating", philo);
 	pthread_mutex_lock(philo->meal_lock);
@@ -31,7 +30,6 @@ void	eat(t_philo *philo)
 	// philo_message("has unlocked meal", philo);
 	ft_usleep(philo->input->time_to_eat);
 	philo->eating = 0;
-
 	pthread_mutex_unlock(philo->right_fork);
 	pthread_mutex_unlock(philo->left_fork);
 }
